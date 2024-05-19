@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
+import { Col, Container, Row, Table } from 'react-bootstrap'
 
 export default function EnquiryForm() {
     let [formData, setFormData] = useState(
@@ -11,7 +11,6 @@ export default function EnquiryForm() {
             index: ''
         }
     )
-
     let getValue = (event) => {
         let oldData = { ...formData };
         let inputName = event.target.name;
@@ -19,25 +18,29 @@ export default function EnquiryForm() {
         oldData[inputName] = inputValue;
         setFormData(oldData);
     }
-
     let [userData, setUserData] = useState([]);
-
     let handleSubmit = (event) => {
-
         let currentUserFormData = {
             uname: formData.uname,
             uemail: formData.uemail,
             uphone: formData.uphone,
             umessage: formData.umessage
         }
-
         let oldUserData = [...userData, currentUserFormData]
-
         setUserData(oldUserData)
+
+        setFormData(
+            {
+                uname: '',
+                uemail: '',
+                uphone: '',
+                umessage: '',
+                index: ''
+            }
+        )
 
         event.preventDefault()
     }
-
     return (
         <Container fluid>
             <Container>
@@ -71,7 +74,47 @@ export default function EnquiryForm() {
                             </button>
                         </form>
                     </Col>
-                    <Col lg={7}></Col>
+                    <Col lg={7}>
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Message</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    userData.length >= 1
+                                        ?
+                                        userData.map((item, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.uname}</td>
+                                                    <td>{item.uemail}</td>
+                                                    <td>{item.uphone}</td>
+                                                    <td>{item.umessage}</td>
+                                                    <td>
+                                                        <button>&#9998;</button>&nbsp;&nbsp;
+                                                        <button>&#10007;</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+
+                                        :
+                                        <tr>
+                                            <td colSpan={6}>No Data Found</td>
+                                        </tr>
+                                }
+
+                            </tbody>
+                        </Table>
+                    </Col>
                 </Row>
             </Container>
         </Container>
