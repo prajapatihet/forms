@@ -47,6 +47,10 @@ export default function EnquiryForm() {
 
         event.preventDefault()
     }
+    let deleteRow = (num) => {
+        let filterDataAfterDelete = userData.filter((v, i) => i !== num)
+        setUserData(filterDataAfterDelete)
+    }
     return (
         <Container fluid>
             <Container>
@@ -106,7 +110,7 @@ export default function EnquiryForm() {
                                                     <td>{item.umessage}</td>
                                                     <td>
                                                         <button>&#9998;</button>&nbsp;&nbsp;
-                                                        <button>&#10007;</button>
+                                                        <button onClick={() => deleteRow(index)}>&#10007;</button>
                                                     </td>
                                                 </tr>
                                             )
