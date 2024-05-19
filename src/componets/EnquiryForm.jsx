@@ -26,18 +26,24 @@ export default function EnquiryForm() {
             uphone: formData.uphone,
             umessage: formData.umessage
         }
-        let oldUserData = [...userData, currentUserFormData]
-        setUserData(oldUserData)
+        let checkUserExists = userData.filter((v) => v.uemail === formData.uemail || v.uphone === formData.uphone);
+        if (checkUserExists.length >= 1) {
+            alert('User already exists')
+        }
+        else {
+            let oldUserData = [...userData, currentUserFormData]
+            setUserData(oldUserData)
 
-        setFormData(
-            {
-                uname: '',
-                uemail: '',
-                uphone: '',
-                umessage: '',
-                index: ''
-            }
-        )
+            setFormData(
+                {
+                    uname: '',
+                    uemail: '',
+                    uphone: '',
+                    umessage: '',
+                    index: ''
+                }
+            )
+        }
 
         event.preventDefault()
     }
@@ -105,7 +111,6 @@ export default function EnquiryForm() {
                                                 </tr>
                                             )
                                         })
-
                                         :
                                         <tr>
                                             <td colSpan={6}>No Data Found</td>
