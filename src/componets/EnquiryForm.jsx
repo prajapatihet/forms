@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Col, Container, Row, Table } from 'react-bootstrap'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function EnquiryForm() {
     let [formData, setFormData] = useState(
@@ -28,12 +30,13 @@ export default function EnquiryForm() {
         }
         let checkUserExists = userData.filter((v) => v.uemail === formData.uemail || v.uphone === formData.uphone);
         if (checkUserExists.length >= 1) {
-            alert('User already exists')
+            // alert('User already exists')
+            toast.error("User Already Exists")
         }
         else {
             let oldUserData = [...userData, currentUserFormData]
             setUserData(oldUserData)
-
+            toast.success("Data inserted Successfully")
             setFormData(
                 {
                     uname: '',
@@ -44,12 +47,12 @@ export default function EnquiryForm() {
                 }
             )
         }
-
         event.preventDefault()
     }
     let deleteRow = (num) => {
         let filterDataAfterDelete = userData.filter((v, i) => i !== num)
         setUserData(filterDataAfterDelete)
+        toast.success("Data Deleted Successfully")
     }
     return (
         <Container fluid>
@@ -126,6 +129,7 @@ export default function EnquiryForm() {
                     </Col>
                 </Row>
             </Container>
+            <ToastContainer />
         </Container>
     )
 }
