@@ -28,24 +28,53 @@ export default function EnquiryForm() {
             uphone: formData.uphone,
             umessage: formData.umessage
         }
-        let checkUserExists = userData.filter((v) => v.uemail === formData.uemail || v.uphone === formData.uphone);
-        if (checkUserExists.length >= 1) {
-            // alert('User already exists')
-            toast.error("User Already Exists")
-        }
-        else {
-            let oldUserData = [...userData, currentUserFormData]
-            setUserData(oldUserData)
-            toast.success("Data inserted Successfully")
-            setFormData(
-                {
-                    uname: '',
-                    uemail: '',
-                    uphone: '',
-                    umessage: '',
-                    index: ''
-                }
-            )
+        if (formData.index === "") {
+            let checkUserExists = userData.filter((v) => v.uemail === formData.uemail || v.uphone === formData.uphone);
+            if (checkUserExists.length === 0) {
+                let oldUserData = [...userData, currentUserFormData]
+                setUserData(oldUserData)
+                toast.success("Data inserted Successfully")
+                setFormData(
+                    {
+                        uname: '',
+                        uemail: '',
+                        uphone: '',
+                        umessage: '',
+                        index: ''
+                    }
+                )
+            }
+            else {
+                // alert('User already exists')
+                toast.error("User Already Exists")
+            }
+        } else {
+            let editIndex = formData.index;
+            let oldData = userData;
+
+            let checkUserExists = userData.filter((v, i) => (v.uemail === formData.uemail || v.uphone === formData.uphone) && i !== editIndex);
+
+            if (checkUserExists.length === 0) {
+                oldData[editIndex]['uname'] = formData.uname;
+                oldData[editIndex]['uemail'] = formData.uemail;
+                oldData[editIndex]['uphone'] = formData.uphone;
+                oldData[editIndex]['umessage'] = formData.umessage;
+
+                setUserData(oldData)
+                toast.success("Data Updated Successfully")
+                setFormData(
+                    {
+                        uname: '',
+                        uemail: '',
+                        uphone: '',
+                        umessage: '',
+                        index: ''
+                    }
+                )
+            } else {
+                toast.error("User Already Exists")
+            }
+
         }
         event.preventDefault()
     }
@@ -53,6 +82,12 @@ export default function EnquiryForm() {
         let filterDataAfterDelete = userData.filter((v, i) => i !== num)
         setUserData(filterDataAfterDelete)
         toast.success("Data Deleted Successfully")
+    }
+
+    let editRow = (num) => {
+        let editData = userData.filter((v, i) => i === num)[0];
+        editData['index'] = num
+        setFormData(editData)
     }
     return (
         <Container fluid>
@@ -112,7 +147,7 @@ export default function EnquiryForm() {
                                                     <td>{item.uphone}</td>
                                                     <td>{item.umessage}</td>
                                                     <td>
-                                                        <button>&#9998;</button>&nbsp;&nbsp;
+                                                        <button onClick={() => editRow(index)}>&#9998;</button>&nbsp;&nbsp;
                                                         <button onClick={() => deleteRow(index)}>&#10007;</button>
                                                     </td>
                                                 </tr>
